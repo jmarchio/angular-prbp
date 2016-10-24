@@ -13,6 +13,7 @@ module.exports = function ( grunt ) {
   //grunt.loadNpmTasks('grunt-contrib-coffee');
   //grunt.loadNpmTasks('grunt-contrib-less');
   //grunt.loadNpmTasks('grunt-conventional-changelog');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-bump');
   //grunt.loadNpmTasks('grunt-coffeelint');
   grunt.loadNpmTasks('grunt-karma');
@@ -253,6 +254,25 @@ module.exports = function ( grunt ) {
       }
     },
 
+    sass: {
+      build: {
+        files: {
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.sass %>'
+        },
+        options: {
+          compass: true
+        }
+      },
+      compile: {
+        files: {
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.sass %>'
+        },
+        options: {
+          style: 'compressed',
+          compass: true
+        }
+      }
+    },
     /**
      * `grunt-contrib-less` handles our LESS compilation and uglification automatically.
      * Only our `main.less` file is included in compilation; all other files
@@ -509,9 +529,19 @@ module.exports = function ( grunt ) {
         tasks: [ 'html2js' ]
       },
 
+
       /**
        * When the CSS files change, we need to compile and minify them.
        */
+      sass: {
+        files: [ 'src/**/*.scss' ],
+        tasks: [ 'sass:build' ]
+      },
+
+      /**
+       * When the CSS files change, we need to compile and minify them.
+       */
+
       //less: {
       //  files: [ 'src/**/*.less' ],
       //  tasks: [ 'less:build' ]
@@ -571,6 +601,7 @@ module.exports = function ( grunt ) {
     'clean', 'html2js', 'jshint',
     //'coffeelint', 'coffee',
     //'less:build',
+    'sass:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build', 'karmaconfig',
     'karma:continuous' 
@@ -581,7 +612,9 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'less:compile', 'copy:compile_assets', 'ngAnnotate', 'concat:compile_js', 'uglify', 'index:compile'
+    //'less:compile',
+    'sass:compile',
+    'copy:compile_assets', 'ngAnnotate', 'concat:compile_js', 'uglify', 'index:compile'
   ]);
 
   /**
