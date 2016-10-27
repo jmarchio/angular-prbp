@@ -48,7 +48,7 @@ module.exports = function ( grunt ) {
         ' * <%= pkg.homepage %>\n' +
         ' *\n' +
         ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
-        ' * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
+        ' * Licensed <%= pkg.license %>\n' +
         ' */\n'
     },
 
@@ -116,7 +116,7 @@ module.exports = function ( grunt ) {
             dest: '<%= build_dir %>/assets/',
             cwd: '.',
             expand: true,
-            flatten: true
+            flatten: false
           }
        ]   
       },
@@ -136,6 +136,16 @@ module.exports = function ( grunt ) {
             src: [ '<%= vendor_files.js %>' ],
             dest: '<%= build_dir %>/',
             cwd: '.',
+            expand: true
+          }
+        ]
+      },
+      build_vendorfonts: {
+        files: [
+          {
+            src: [ '<%= vendor_files.fonts %>' ],
+            dest: '<%= build_dir %>/assets/fonts',
+            flatten: true,
             expand: true
           }
         ]
@@ -179,9 +189,9 @@ module.exports = function ( grunt ) {
       build_css: {
         src: [
           '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          '<%= build_dir %>/assets/css/<%= pkg.name %>-<%= pkg.version %>.css'
         ],
-        dest: '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+        dest: '<%= build_dir %>/assets/css/<%= pkg.name %>-<%= pkg.version %>.css'
       },
       /**
        * The `compile_js` target is the concatenation of our application source
@@ -191,13 +201,13 @@ module.exports = function ( grunt ) {
         options: {
           banner: '<%= meta.banner %>'
         },
-        src: [ 
-          '<%= vendor_files.js %>', 
-          'module.prefix', 
-          '<%= build_dir %>/src/**/*.js', 
-          '<%= html2js.app.dest %>', 
-          '<%= html2js.common.dest %>', 
-          'module.suffix' 
+        src: [
+          '<%= vendor_files.js %>',
+          'module.prefix',
+          '<%= build_dir %>/src/**/*.js',
+          '<%= html2js.app.dest %>',
+          '<%= html2js.common.dest %>',
+          'module.suffix'
         ],
         dest: '<%= compile_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.js'
       }
@@ -257,7 +267,7 @@ module.exports = function ( grunt ) {
     sass: {
       build: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.sass %>'
+          '<%= build_dir %>/assets/css/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.sass %>'
         },
         options: {
           compass: true
@@ -265,7 +275,7 @@ module.exports = function ( grunt ) {
       },
       compile: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.sass %>'
+          '<%= build_dir %>/assets/css/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.sass %>'
         },
         options: {
           style: 'compressed',
@@ -409,7 +419,7 @@ module.exports = function ( grunt ) {
           '<%= html2js.common.dest %>',
           '<%= html2js.app.dest %>',
           '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          '<%= build_dir %>/assets/css/<%= pkg.name %>-<%= pkg.version %>.css'
         ]
       },
 
@@ -423,7 +433,7 @@ module.exports = function ( grunt ) {
         src: [
           '<%= concat.compile_js.dest %>',
           '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          '<%= build_dir %>/assets/css/<%= pkg.name %>-<%= pkg.version %>.css'
         ]
       }
     },
@@ -603,7 +613,7 @@ module.exports = function ( grunt ) {
     //'less:build',
     'sass:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build', 'karmaconfig',
+    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorfonts', 'copy:build_vendorcss', 'index:build', 'karmaconfig',
     'karma:continuous' 
   ]);
 

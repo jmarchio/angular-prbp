@@ -1,5 +1,2 @@
-body{
-  background: red;
-}
-
-@import 'home/home.scss';
+/** Example of the use of materialize's variable **/
+body{background: $primary-color-dark;}

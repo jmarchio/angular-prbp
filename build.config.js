@@ -30,7 +30,7 @@ module.exports = {
     ctpl: [ 'src/common/**/*.tpl.html' ],
 
     html: [ 'src/index.html' ],
-    sass: 'src/app/app.scss'
+    sass: 'src/sass/main.scss'
   },
 
   /**
@@ -71,6 +71,9 @@ module.exports = {
     css: [
     ],
     assets: [
+    ],
+    fonts: [
+      'vendor/materialize/fonts/roboto/*'
     ]
-  },
+  }
 };
